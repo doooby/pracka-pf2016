@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dotaz do BQ</title>
+
+  <%= stylesheet_tag 'app' %>
+  <%= javascript_tag 'app' %>
+</head>
+<body>
+
+
+<h2> BiqQuery SELECT query </h2>
+
+<div class="row full-width">
+  <div class="column small-12 medium-6">
+    <div id="query_editor_holder"></div>
+    <button id="submit_query" class="radius">Query</button>
+  </div>
+  <div class="column small-12 medium-6">
+    <div id="query_status"></div>
+  </div>
+</div>
+
+<table id="query_output">
+
+</table>
+
+
+</body>
+</html>
