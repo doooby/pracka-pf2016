@@ -8,10 +8,6 @@ gem 'therubyracer', platforms: :ruby
 gem 'sinatra-asset-pipeline'
 
 group :development do
-
   gem 'byebug'
-  gem 'sinatra-contrib'
-
   gem 'sass'
-
 end
