@@ -1,0 +1,44 @@
+//= require ./bliss
+//= require d2o
+//= depend_on_asset pf
+
+(function (factory) {
+
+  var root = self;
+  var PF = factory(root, {});
+  root.PF = PF;
+
+}(function (root, PF) {
+
+  "use strict";
+  var load_semaphore;
+
+  <%= environment.find_asset('pf').to_s %>
+
+  document.addEventListener("DOMContentLoaded", function() {
+    if (load_semaphore) load_semaphore();
+    else load_semaphore = true;
+  });
+
+  (new D2O.Loader()).enqueueImages({
+    "player": "<%= image_path 'chobotnice.png' %>",
+    "crit": "<%= image_path 'lekarnicka.png' %>"
+  }).enqueue(function () {
+    if (load_semaphore) this.doNext();
+    else load_semaphore = this.doNext;
+  }).enqueue(function () {
+    PF.images = this.images;
+    PF.canvas.prepare(90, 3/5);
+    PF.canvas.on_resize();
+
+    PF.scene = new D2O.Scene(PF.canvas.buffer_ctx);
+    PF.scene.afterRenderObjects = function () {
+      PF.canvas.projectIntoTarget();
+    };
+    PF.scene.commenseTickingAnimation(200);
+
+    PF.player.prepareForTestPlay();
+  }).start();
+
+  return PF;
+}));
