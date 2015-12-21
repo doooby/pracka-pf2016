@@ -22,7 +22,7 @@
 
   (new D2O.Loader()).enqueueImages({
     "player": "<%= image_path 'chobotnice.png' %>",
-    "crit": "<%= image_path 'lekarnicka.png' %>"
+    "gizmo": "<%= image_path 'lekarnicka.png' %>"
   }).enqueue(function () {
     if (load_semaphore) this.doNext();
     else load_semaphore = this.doNext;
@@ -35,9 +35,17 @@
     PF.scene.afterRenderObjects = function () {
       PF.canvas.projectIntoTarget();
     };
-    PF.scene.commenseTickingAnimation(200);
+    PF.scene.commenseTickingAnimation(100);
 
+
+    PF.scene.add({
+      render: function (ctx) {
+        ctx.fillRect(0, 0, PF.canvas.buffer.width, PF.canvas.buffer.height);
+      }
+    });
+    PF.gizmos.prepareForTestPlay();
     PF.player.prepareForTestPlay();
+
   }).start();
 
   return PF;
