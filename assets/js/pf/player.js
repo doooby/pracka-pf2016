@@ -8,11 +8,6 @@ PF.player = {
     go_right: false,
     //dragg_right: false,
 
-    prepareForTestPlay: function () {
-        this.createSprite();
-        this.gameplay = true;
-        PF.scene.add(this.sprite);
-    },
 
     createSprite: function () {
         var p = this, sprite = new D2O.Sprite(PF.images["player"]);
@@ -48,9 +43,9 @@ PF.player = {
         sprite.hit_circle = new D2O.Sprite.HitCircle(sprite, sprite.width/2,
             new D2O.Vector2(0, -sprite.height/3.2));
         sprite.hit_circle.stroke_style = "yellow";
-        sprite.render_more = function (ctx) {
-            sprite.hit_circle.render(ctx);
-        };
+        //sprite.render_more = function (ctx) {
+        //    sprite.hit_circle.render(ctx);
+        //};
 
         this.sprite = sprite;
     }

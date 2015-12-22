@@ -32,19 +32,11 @@
     PF.canvas.on_resize();
 
     PF.scene = new D2O.Scene(PF.canvas.buffer_ctx);
-    PF.scene.afterRenderObjects = function () {
+    PF.scene._after_frame = function () {
       PF.canvas.projectIntoTarget();
     };
-    PF.scene.commenseTickingAnimation(100);
 
-
-    PF.scene.add({
-      render: function (ctx) {
-        ctx.fillRect(0, 0, PF.canvas.buffer.width, PF.canvas.buffer.height);
-      }
-    });
-    PF.gizmos.prepareForTestPlay();
-    PF.player.prepareForTestPlay();
+    PF.scenes.gameplay();
 
   }).start();
 

@@ -3,17 +3,12 @@ PF.gizmos = {
 
     objects: [],
 
-    prepareForTestPlay: function () {
-        PF.scene.add(this.creator);
-        PF.scene.add(this);
-    },
-
     update: function () {
         var self = this;
         this.objects.forEach(function (g, i) {
             if (g) {
                 g.position.y += g.motion_vector.y;
-                if (g.position.y > PF.canvas.buffer.height - 10) {
+                if (g.position.y > PF.canvas.buffer.height) {
                     self.objects[i] = null;
                 }
                 if (g.hit_circle.collide(PF.player.sprite.hit_circle)) {
@@ -44,9 +39,9 @@ PF.gizmos = {
 
         g.hit_circle = new D2O.Sprite.HitCircle(g, g.calcInnerRadius());
         g.hit_circle.stroke_style = "green";
-        g.render_more = function (ctx) {
-            g.hit_circle.render(ctx);
-        };
+        //g.render_more = function (ctx) {
+        //    g.hit_circle.render(ctx);
+        //};
 
         PF.gizmos.objects[PF.gizmos.getNextEmptyPosition()] = g;
     })
