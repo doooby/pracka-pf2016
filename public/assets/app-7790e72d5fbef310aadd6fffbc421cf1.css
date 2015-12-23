@@ -1,0 +1,30 @@
+@font-face {
+  font-family: 'ambitsek';
+  src: url("/assets/ambitsek-82a6ec83bfc89c4b4244d04932c4f4e9.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal; }
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: "ambitsek", monospace; }
+
+.page {
+  background-color: black;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center; }
+
+#container {
+  display: block;
+  margin: 0;
+  background-color: white; }
+
+#buffer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: white;
+  margin: 10px; }
