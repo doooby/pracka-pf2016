@@ -14,7 +14,13 @@ configure do
   end
 
   register Sinatra::AssetPipeline
-  settings.sprockets.append_path '/home/ondra/Projects/_js/d2o/lib'
+
+  if settings.development?
+    d2o_file = "#{Sinatra::Application.settings.root}/assets/js/d2o.js"
+    File.delete d2o_file if File.exist? d2o_file
+    settings.sprockets.append_path '/home/ondra/Projects/_js/d2o/lib'
+  end
+
 end
 
 get '/' do
