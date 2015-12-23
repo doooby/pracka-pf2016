@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+
+ENV['BUNDLE_GEMFILE'] = File.expand_path('../../Gemfile', __FILE__)
+require 'bundler'
+Bundler.setup :default, :development
+
+require 'byebug'
+
+#ENV['RACK_ENV'] = 'production'
+require_relative '../application'
+require 'sinatra/asset_pipeline/task'
+
+Sinatra::AssetPipeline::Task.define! Sinatra::Application
+Rake::Task['assets:precompile'].invoke
