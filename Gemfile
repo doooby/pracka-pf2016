@@ -5,9 +5,13 @@ gem 'sinatra'
 gem 'puma'
 
 gem 'therubyracer', platforms: :ruby
+gem 'sass'
 gem 'sinatra-asset-pipeline'
 
 group :development do
   gem 'byebug'
-  gem 'sass'
+end
+
+group :production do
+  gem 'uglifier'
 end
