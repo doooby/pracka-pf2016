@@ -2,7 +2,6 @@ PF.scenes = {
 
     intro: function () {
         PF.scene.removeAll();
-        PF.scene.add(PF.utils.createBgCleaner("white"));
 
         //var t1 = new D2O.TextField("ěščřžýáí dsflsdajfůl", new D2O.Vector2(4, 50), "8px Verdana");
         var t1 = new D2O.TextField("ěščřžýáí dsflsdajfůl", new D2O.Vector2(4, 50), "25px Pixel7");
@@ -22,9 +21,6 @@ PF.scenes = {
 
     gameplay: function () {
         PF.scene.removeAll();
-
-        // bg cleaner
-        PF.scene.add(PF.utils.createBgCleaner("#5C8CAA"));
 
         // player
         PF.player.createSprite();

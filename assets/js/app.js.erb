@@ -21,8 +21,19 @@
   });
 
   (new D2O.Loader()).enqueueImages({
-    "player": "<%= image_path 'chobotnice.png' %>",
-    "gizmo": "<%= image_path 'lekarnicka.png' %>"
+    "background": "<%= image_path 'pozadi.png' %>",
+
+    "brouk": "<%= image_path 'brouk.png' %>",
+    "kluk": "<%= image_path 'kluk.png' %>",
+    "oplatka": "<%= image_path 'oplatka.png' %>",
+    "chobotnice": "<%= image_path 'chobotnice.png' %>",
+
+    "mazlicek": "<%= image_path 'mazlicek.png' %>",
+    "penize": "<%= image_path 'penize.png' %>",
+    "srdce": "<%= image_path 'srdce.png' %>",
+    "uspech": "<%= image_path 'uspech.png' %>",
+    "zdravi": "<%= image_path 'zdravi.png' %>",
+    "stesti": "<%= image_path 'stesti.png' %>"
   }).enqueue(function () {
     if (load_semaphore) this.doNext();
     else load_semaphore = this.doNext;
@@ -32,7 +43,10 @@
     PF.canvas.on_resize();
 
     PF.scene = new D2O.Scene(PF.canvas.buffer_ctx);
-    PF.scene._after_frame = function () {
+    PF.scene.singleFrame = function (since_last) {
+      this._objects.forEach(function (o) { if (o.update) o.update(since_last); });
+      PF.canvas.buffer_ctx.drawImage(PF.images["background"], 0, 0, PF.canvas.buffer.width, PF.canvas.buffer.height);
+      this._objects.forEach(function (o) { if (o.render) o.render(PF.canvas.buffer_ctx); });
       PF.canvas.projectIntoTarget();
     };
 

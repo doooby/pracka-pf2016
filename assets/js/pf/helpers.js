@@ -15,15 +15,6 @@ PF.utils = {
         };
     },
 
-    createBgCleaner: function (color) {
-        return {
-            render: function (ctx) {
-                var style_holder = new D2O.StyleHolder(ctx, "fill", color);
-                ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-                style_holder.reset();
-            }
-        };
-    },
 
 
 

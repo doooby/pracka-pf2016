@@ -1,32 +1,23 @@
 
 PF.player = {
 
-    move_speed: 10,
+    move_speed: 7,
+    character: "chobotnice",
 
     go_left: false,
-    //dragg_left: false,
     go_right: false,
-    //dragg_right: false,
 
 
     createSprite: function () {
-        var p = this, sprite = new D2O.Sprite(PF.images["player"]);
+        var p = this, sprite = new D2O.Sprite(PF.images[this.character]);
         var half_width = sprite.width / 2;
 
-        sprite.position.set(25, 70);
+        sprite.position.set(Math.floor(PF.canvas.buffer.width/2), PF.canvas.buffer.height - 27);
 
         sprite.update = function (delta) {
             var x_motion = 0;
-            if (p.go_left) {
-            //if (p.dragg_left || p.go_left) {
-                x_motion -= p.move_speed;
-                //p.dragg_left = false;
-            }
-            if (p.go_right) {
-            //if (p.dragg_right || p.go_right) {
-                x_motion += p.move_speed;
-                //p.dragg_right = false;
-            }
+            if (p.go_left) x_motion -= p.move_speed;
+            if (p.go_right) x_motion += p.move_speed;
 
             this.position.x += x_motion * delta;
             if (this.position.x < half_width) {
@@ -35,14 +26,11 @@ PF.player = {
             if (this.position.x > PF.canvas.buffer.width - half_width) {
                 this.position.x = PF.canvas.buffer.width - half_width;
             }
-
-            //p.dragg_left = p.go_left;
-            //p.dragg_right = p.go_right;
         };
 
         sprite.hit_circle = new D2O.Sprite.HitCircle(sprite, sprite.width/2,
             new D2O.Vector2(0, -sprite.height/3.2));
-        sprite.hit_circle.stroke_style = "yellow";
+        //sprite.hit_circle.stroke_style = "yellow";
         //sprite.render_more = function (ctx) {
         //    sprite.hit_circle.render(ctx);
         //};
@@ -54,14 +42,8 @@ PF.player = {
 
 document.addEventListener("keydown", function (e) {
     if (!PF.player.gameplay) return;
-    if (e.keyCode===37) {
-        PF.player.go_left = true;
-        //PF.player.dragg_left = true;
-    }
-    if (e.keyCode===39) {
-        PF.player.go_right = true;
-        //PF.player.dragg_right = true;
-    }
+    if (e.keyCode===37) PF.player.go_left = true;
+    if (e.keyCode===39) PF.player.go_right = true;
 });
 document.addEventListener("keyup", function (e) {
     if (!PF.player.gameplay) return;
