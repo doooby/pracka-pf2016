@@ -21,7 +21,8 @@
   });
 
   (new D2O.Loader()).enqueueImages({
-    "background": "<%= image_path 'pozadi.png' %>",
+    "bg1": "<%= image_path 'pozadi1.png' %>",
+    "bg2": "<%= image_path 'pozadi2.png' %>",
 
     "brouk": "<%= image_path 'brouk.png' %>",
     "kluk": "<%= image_path 'kluk.png' %>",
@@ -40,17 +41,11 @@
   }).enqueue(function () {
     PF.images = this.images;
     PF.canvas.prepare(90, 3/5);
-    PF.canvas.on_resize();
+    PF.canvas._on_resize();
 
-    PF.scene = new D2O.Scene(PF.canvas.buffer_ctx);
-    PF.scene.singleFrame = function (since_last) {
-      this._objects.forEach(function (o) { if (o.update) o.update(since_last); });
-      PF.canvas.buffer_ctx.drawImage(PF.images["background"], 0, 0, PF.canvas.buffer.width, PF.canvas.buffer.height);
-      this._objects.forEach(function (o) { if (o.render) o.render(PF.canvas.buffer_ctx); });
-      PF.canvas.projectIntoTarget();
-    };
+    PF.scenes.createSceneHolder();
 
-    PF.scenes.gameplay();
+    PF.scenes.char_choose();
 
   }).start();
 

@@ -1,13 +1,7 @@
 #!/usr/bin/env ruby
 
-ENV['RACK_ENV'] = 'development'
+require 'pathname'
 
-ENV['BUNDLE_GEMFILE'] = File.expand_path('../../Gemfile', __FILE__)
-require 'bundler'
-Bundler.setup :default, :development, :production
-
-require_relative '../application'
-settings.sprockets.append_path '/home/ondra/Projects/_js/d2o/lib'
-
-File.write "#{Sinatra::Application.settings.root}/assets/js/d2o.js",
-           Sinatra::Application.settings.sprockets.find_asset('d2o.js').to_s
+d2o_path = Pathname.new '/home/ondra/Projects/_js/d2o'
+require d2o_path.join('build').to_path
+FileUtils.copy d2o_path.join('build', 'd2o.js'), File.expand_path('../../assets/js/d2o.js', __FILE__)

@@ -10,6 +10,8 @@ PF.canvas = {
     target_ctx: null,
     projectIntoTarget: null,
 
+    to_target_ratio: NaN,
+
     prepare: function (height, wh_ratio) {
         this.buffer = document.createElement("CANVAS");
         this.buffer.id = "buffer";
@@ -35,10 +37,10 @@ PF.canvas = {
         this.target.width = width;
         this.target.height = height;
         this.container.appendChild(this.target);
-        this.container.appendChild(this.buffer);
 
         this.target_ctx = this.target.getContext("2d");
         this.target_ctx.mozImageSmoothingEnabled = false;
+        this.target_ctx.oImageSmoothingEnabled = false;
         this.target_ctx.webkitImageSmoothingEnabled = false;
         this.target_ctx.msImageSmoothingEnabled = false;
         this.target_ctx.imageSmoothingEnabled = false;
@@ -46,25 +48,51 @@ PF.canvas = {
         this.projectIntoTarget = function () {
             self.target_ctx.drawImage(self.buffer, 0, 0, width, height);
         };
-    }
 
+        this.target.addEventListener("mousemove", function (e) {
+            var last_btn = PF.scene.mouse_on_button, current_btn;
+            current_btn = PF.scene.checkButtons(PF.canvas.mousePosition(e).mulScalar(1 / PF.canvas.to_target_ratio));
+            if (last_btn!==current_btn) {
+                if (last_btn && last_btn.on_leave) last_btn.on_leave();
+                if (current_btn && current_btn.on_hover) current_btn.on_hover();
+            }
+        });
+    },
+
+    inTargetSpace: function (val) {
+        return Math.floor(this.to_target_ratio * val);
+    },
+
+    _on_resize: function () {
+        if (!PF.canvas.container) return;
+
+        var w, h, page = $(".page");
+        h = page.clientHeight - 10;
+        w = Math.floor(h * PF.canvas.buffer_wh_ratio);
+        if (w > page.clientWidth) {
+            w = page.clientWidth;
+            h = Math.floor(w / PF.canvas.buffer_wh_ratio);
+        }
+        $.set(PF.canvas.container, {style: {
+            width: ""+w+"px",
+            height: ""+h+"px"
+        }});
+
+        PF.canvas.to_target_ratio = w / PF.canvas.buffer.width;
+
+        PF.canvas.rebuildTarget();
+        if (PF.scene) {
+            PF.scene.repositionTexts();
+            PF.scene.singleFrame();
+        }
+    },
+
+    mousePosition: function (e) {
+        return new D2O.Vector2(
+            e.clientX - this.target.offsetLeft + window.pageXOffset,
+            e.clientY - this.target.offsetTop  + window.pageYOffset
+        );
+    }
 };
 
-PF.canvas.on_resize = function () {
-    if (!PF.canvas.container) return;
-    var w, h, page = $(".page");
-    h = page.clientHeight - 10;
-    w = Math.floor(h * PF.canvas.buffer_wh_ratio);
-    if (w > page.clientWidth) {
-        w = page.clientWidth;
-        h = Math.floor(w / PF.canvas.buffer_wh_ratio);
-    }
-    $.set(PF.canvas.container, {style: {
-        width: ""+w+"px",
-        height: ""+h+"px"
-    }});
-    PF.canvas.rebuildTarget();
-    PF.canvas.projectIntoTarget();
-}
-
-root.addEventListener("resize", PF.utils.throttle(PF.canvas.on_resize, 300));
+root.addEventListener("resize", PF.utils.throttle(PF.canvas._on_resize, 300));
