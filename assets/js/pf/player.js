@@ -36,17 +36,21 @@ PF.player = {
         //};
 
         this.sprite = sprite;
+    },
+
+    attachKeyboard: function () {
+        PF.canvas.attachKeayboardEvents({
+            keydown: function (e) {
+                if (!PF.player.gameplay) return;
+                if (e.keyCode===37) PF.player.go_left = true;
+                if (e.keyCode===39) PF.player.go_right = true;
+            },
+            keyup: function (e) {
+                if (!PF.player.gameplay) return;
+                if (e.keyCode===37) PF.player.go_left = false;
+                if (e.keyCode===39) PF.player.go_right = false;
+            }
+        });
     }
 
 };
-
-document.addEventListener("keydown", function (e) {
-    if (!PF.player.gameplay) return;
-    if (e.keyCode===37) PF.player.go_left = true;
-    if (e.keyCode===39) PF.player.go_right = true;
-});
-document.addEventListener("keyup", function (e) {
-    if (!PF.player.gameplay) return;
-    if (e.keyCode===37) PF.player.go_left = false;
-    if (e.keyCode===39) PF.player.go_right = false;
-});

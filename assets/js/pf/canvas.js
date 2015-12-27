@@ -12,6 +12,8 @@ PF.canvas = {
 
     to_target_ratio: NaN,
 
+    keyboard_events: {},
+
     prepare: function (height, wh_ratio) {
         this.buffer = document.createElement("CANVAS");
         this.buffer.id = "buffer";
@@ -57,6 +59,11 @@ PF.canvas = {
                 if (current_btn && current_btn.on_hover) current_btn.on_hover();
             }
         });
+
+        this.target.addEventListener("click", function (e) {
+            var btn = PF.scene.checkButtons(PF.canvas.mousePosition(e).mulScalar(1 / PF.canvas.to_target_ratio));
+            if (btn && btn.on_click) btn.on_click();
+        });
     },
 
     inTargetSpace: function (val) {
@@ -92,6 +99,25 @@ PF.canvas = {
             e.clientX - this.target.offsetLeft + window.pageXOffset,
             e.clientY - this.target.offsetTop  + window.pageYOffset
         );
+    },
+
+    attachKeayboardEvents: function (events) {
+        if (this.keyboard_events.keydown) {
+            root.removeEventListener("keydown", this.keyboard_events.keydown);
+            this.keyboard_events.keydown = null;
+        }
+        if (this.keyboard_events.keyup) {
+            root.removeEventListener("keyup", this.keyboard_events.keyup);
+            this.keyboard_events.keyup = null;
+        }
+        if (events.keydown) {
+            root.addEventListener("keydown", events.keydown);
+            this.keyboard_events.keydown = events.keydown;
+        }
+        if (events.keyup) {
+            root.addEventListener("keyup", events.keyup);
+            this.keyboard_events.keyup = events.keyup;
+        }
     }
 };
 

@@ -41,6 +41,13 @@
             var tl = this.position;
             var br = tl.clone().add(this.size);
             return v.x>=tl.x && v.x<=br.x && v.y>=tl.y && v.y<=br.y;
+        },
+
+        render: function (ctx) {
+            if (!this.do_render) return;
+            var style = new D2O.StyleHolder(ctx, "stroke", "black");
+            ctx.strokeRect(this.position.x, this.position.y, this.size.x, this.size.y);
+            style.reset();
         }
 
     };
