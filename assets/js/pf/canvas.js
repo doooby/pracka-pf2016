@@ -53,7 +53,8 @@ PF.canvas = {
 
         this.target.addEventListener("mousemove", function (e) {
             var last_btn = PF.scene.mouse_on_button, current_btn;
-            current_btn = PF.scene.checkButtons(PF.canvas.mousePosition(e).mulScalar(1 / PF.canvas.to_target_ratio));
+            var v = new D2O.Vector2(e.pageX - PF.canvas.target.offsetLeft, e.pageY - PF.canvas.target.offsetTop);
+            current_btn = PF.scene.checkButtons(v.mulScalar(1 / PF.canvas.to_target_ratio));
             if (last_btn!==current_btn) {
                 if (last_btn && last_btn.on_leave) last_btn.on_leave();
                 if (current_btn && current_btn.on_hover) current_btn.on_hover();
@@ -61,7 +62,8 @@ PF.canvas = {
         });
 
         this.target.addEventListener("click", function (e) {
-            var btn = PF.scene.checkButtons(PF.canvas.mousePosition(e).mulScalar(1 / PF.canvas.to_target_ratio));
+            var v = new D2O.Vector2(e.pageX - PF.canvas.target.offsetLeft, e.pageY - PF.canvas.target.offsetTop);
+            var btn = PF.scene.checkButtons(v.mulScalar(1 / PF.canvas.to_target_ratio));
             if (btn && btn.on_click) btn.on_click();
         });
     },
@@ -92,13 +94,6 @@ PF.canvas = {
             PF.scene.repositionTexts();
             PF.scene.singleFrame();
         }
-    },
-
-    mousePosition: function (e) {
-        return new D2O.Vector2(
-            e.clientX - this.target.offsetLeft + window.pageXOffset,
-            e.clientY - this.target.offsetTop  + window.pageYOffset
-        );
     },
 
     attachKeayboardEvents: function (events) {

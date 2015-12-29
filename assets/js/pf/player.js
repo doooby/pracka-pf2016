@@ -12,7 +12,7 @@ PF.player = {
         var p = this, sprite = new D2O.Sprite(PF.images[this.character]);
         var half_width = sprite.width / 2;
 
-        sprite.position.set(Math.floor(PF.canvas.buffer.width/2), PF.canvas.buffer.height - 27);
+        sprite.position.set(Math.floor(PF.canvas.buffer.width/2), -50);
 
         sprite.update = function (delta) {
             var x_motion = 0;
@@ -51,6 +51,20 @@ PF.player = {
                 if (e.keyCode===39) PF.player.go_right = false;
             }
         });
+    },
+
+    landYPosition: function () {
+        return PF.canvas.buffer.height - 27;
+    },
+
+    fallDown: function () {
+        this.sprite.position.y = -this.sprite.height / 2 + 4;
+        return this.landYPosition() - this.sprite.position.y;
+    },
+
+    flyUp: function () {
+        this.sprite.position.y = this.landYPosition();
+        return this.landYPosition() + this.sprite.height/2 - 4;
     }
 
 };

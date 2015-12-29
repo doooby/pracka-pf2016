@@ -1,4 +1,6 @@
 //= require ./bliss
+//= require ./FontLoader
+//= require ./Howler
 //= require d2o
 //= depend_on_asset pf
 
@@ -15,9 +17,15 @@
 
   <%= environment.find_asset('pf').to_s %>
 
-  document.addEventListener("DOMContentLoaded", function() {
-    if (load_semaphore) load_semaphore();
-    else load_semaphore = true;
+  root.addEventListener("load", function() {
+    (new FontLoader(["pracka_font"], {
+      complete: function (err) {
+        if (!err) {
+          if (load_semaphore) load_semaphore();
+          else load_semaphore = true;
+        }
+      }
+    })).loadFonts();
   });
 
   (new D2O.Loader()).enqueueImages({
@@ -38,10 +46,18 @@
     "srdce": "<%= image_path 'srdce.png' %>",
     "uspech": "<%= image_path 'uspech.png' %>",
     "zdravi": "<%= image_path 'zdravi.png' %>",
-    "stesti": "<%= image_path 'stesti.png' %>"
+    "stesti": "<%= image_path 'stesti.png' %>",
+
+    "vlevo": "<%= image_path 'vlevo.png' %>",
+    "vlevo_on": "<%= image_path 'vlevo_on.png' %>",
+    "vpravo": "<%= image_path 'vpravo.png' %>",
+    "vpravo_on": "<%= image_path 'vpravo_on.png' %>"
   }).enqueue(function () {
     if (load_semaphore) this.doNext();
-    else load_semaphore = this.doNext;
+    else {
+      var loader = this;
+      load_semaphore = function () { loader.doNext(); };
+    }
   }).enqueue(function () {
     PF.images = this.images;
     PF.canvas.prepare(90, 3/5);
@@ -52,6 +68,19 @@
     PF.scenes.intro();
 
   }).start();
+
+
+  PF.audio = new Howl({
+    urls: ["<%= audio_path 'gameplay.mp3' %>"],
+    onload: function () {
+      if (typeof PF.scenes.audio_loaded === "function") PF.scenes.audio_loaded();
+      else PF.scenes.audio_loaded = true;
+    },
+    onplay: function () {
+      if (typeof PF.scenes.audio_play === "function") PF.scenes.audio_play();
+    }
+  });
+
 
   return PF;
 }));

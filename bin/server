@@ -7,7 +7,6 @@ require 'bundler'
 Bundler.setup :default, :development
 
 require 'byebug'
-
-require 'puma/cli'
-cli = Puma::CLI.new ARGV
-cli.run
+require File.expand_path('../../application.rb', __FILE__)
+Sinatra::Application.set :bind, '0.0.0.0'
+Sinatra::Application.run!

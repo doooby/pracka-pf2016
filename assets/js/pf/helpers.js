@@ -27,8 +27,9 @@
     PF.utils.CustomTextField.prototype.recalc = function () {
         this.position = new D2O.Vector2(PF.canvas.inTargetSpace(this.rel_position.x),
             PF.canvas.inTargetSpace(this.rel_position.y));
-        this.font = PF.canvas.inTargetSpace(this.rel_size).toString()+"px best_font";
+        this.font = PF.canvas.inTargetSpace(this.rel_size).toString()+"px pracka_font";
     };
+
 
 
     PF.utils.Button = function (x, y, w, h) {

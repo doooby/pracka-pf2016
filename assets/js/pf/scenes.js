@@ -57,7 +57,7 @@ PF.scenes = {
         PF.scene.addText("Copak ti v příštím roce", new D2O.Vector2(3, 40), 3);
         PF.scene.addText(" spadne na hlavu?", new D2O.Vector2(7.5, 60), 3);
 
-        this.create_switcher("credits");
+        this.create_switcher("char_choose");
 
         PF.scene.singleFrame();
     },
@@ -68,14 +68,14 @@ PF.scenes = {
         var x_middle = PF.canvas.buffer.width / 2;
         ["tygr", "zela", "koci"].forEach(function (name, i) {
             var item_y = 18 + i*(74 / 3);
-            PF.scene.addText(name, new D2O.Vector2(x_middle - 4, item_y), 3);
+            PF.scene.addText((name==="zela" ? "žela" : name), new D2O.Vector2(x_middle - 4, item_y), 3);
             var s = new D2O.Sprite(PF.images[name]);
             s.position.x = x_middle;
             s.position.y = item_y + 8;
             PF.scene.add(s);
         });
 
-        this.create_switcher("char_choose", 3000);
+        this.create_switcher("resume", 3000);
 
         PF.scene.singleFrame();
     },
@@ -129,21 +129,81 @@ PF.scenes = {
 
 
     gameplay: function () {
+        if (this.audio_loaded !== true) {
+            this.audio_loaded = function () {
+                this.audio_loaded = true;
+              PF.scenes.gameplay();
+            };
+            this.waiting();
+            return;
+        }
+
         PF.scene.clear();
         PF.scene.bg = "bg2";
+        PF.scene.singleFrame();
 
-        // player
+        var downer, step, upper;
         PF.player.createSprite();
         PF.player.attachKeyboard();
-        PF.player.gameplay = true;
-        PF.scene.add(PF.player.sprite);
 
-        //gizmos
-        PF.gizmos.objects.length = 0;
-        PF.scene.add(PF.gizmos.creator);
+        downer = new D2O.Looper(0.67, function () {
+            if (downer.ticks === 9) PF.scene.add(PF.gizmos.creator);
+            if (downer.ticks === 6) step = PF.player.fallDown() / 8;
+            if (downer.ticks >= 14) {
+                PF.scene.remove(downer);
+                PF.player.gameplay = true;
+                PF.scene._texts = [];
+            }
+            if (downer.ticks >= 7) PF.player.sprite.position.y += step;
+            downer.ticks += 1;
+        });
+        downer.ticks = 0;
+
+        upper = new D2O.Looper(0.67, function () {
+            if (upper.ticks === 17) step = PF.player.flyUp() / 8;
+            if (upper.ticks >= 27) {
+                PF.scene.remove(upper);
+                PF.scenes.credits();
+            }
+            if (upper.ticks >= 18) {
+                PF.player.gameplay = false;
+                PF.player.sprite.position.y -= step;
+            }
+            upper.ticks += 1;
+        });
+        upper.ticks = 0;
+
         PF.scene.add(PF.gizmos);
+        PF.scene.add(PF.player.sprite);
+        PF.scene.add(downer);
+        PF.scene.addText("Sbírej padající symboly.", new D2O.Vector2(3, 30), 3);
+        PF.scene.addText("Pro pohyb použij šipky.", new D2O.Vector2(3, 45), 3);
 
-        PF.scene.commenseTickingAnimation(100);
+        PF.scenes.audio_play = function () {
+            PF.scenes.audio_play = null;
+            PF.scene.commenseTickingAnimation(100);
+
+            setTimeout(function () {
+                PF.scene.add(upper);
+                PF.scene.remove(PF.gizmos.creator);
+            },102000);
+        };
+        PF.audio.fadeIn(1, 5000);
+    },
+
+    waiting: function () {
+        PF.scene.clear();
+        PF.scene.bg = "bg1";
+        PF.scene.addText("nahrávám ...", new D2O.Vector2(3, 45), 3);
+        PF.scene.singleFrame();
+    },
+
+    resume: function () {
+        PF.scene.clear();
+        PF.scene.bg = "bg1";
+
+
+        PF.scene.singleFrame();
     },
 
     create_switcher: function (scene_name, timeout) {
@@ -169,6 +229,5 @@ PF.scenes = {
         };
         PF.scene.addButton(btn);
     }
-
 
 };
