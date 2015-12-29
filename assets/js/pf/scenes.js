@@ -149,12 +149,12 @@ PF.scenes = {
         PF.player.addArrowsToScene();
 
         downer = new D2O.Looper(0.67, function () {
-            if (downer.ticks === 9) PF.scene.add(PF.gizmos.creator);
             if (downer.ticks === 6) step = PF.player.fallDown() / 8;
             if (downer.ticks >= 14) {
                 PF.scene.remove(downer);
                 PF.player.gameplay = true;
                 PF.scene._texts = [];
+                PF.scene.add(PF.gizmos.creator);
             }
             if (downer.ticks >= 7) PF.player.sprite.position.y += step;
             downer.ticks += 1;
