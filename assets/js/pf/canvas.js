@@ -61,11 +61,25 @@ PF.canvas = {
             }
         });
 
-        this.target.addEventListener("click", function (e) {
+        //this.target.addEventListener("click", function (e) {
+        //    var v = new D2O.Vector2(e.pageX - PF.canvas.target.offsetLeft, e.pageY - PF.canvas.target.offsetTop);
+        //    var btn = PF.scene.checkButtons(v.mulScalar(1 / PF.canvas.to_target_ratio));
+        //    if (btn && btn.on_click) btn.on_click();
+        //});
+
+
+        this.target.addEventListener("mousedown", function (e) {
             var v = new D2O.Vector2(e.pageX - PF.canvas.target.offsetLeft, e.pageY - PF.canvas.target.offsetTop);
             var btn = PF.scene.checkButtons(v.mulScalar(1 / PF.canvas.to_target_ratio));
-            if (btn && btn.on_click) btn.on_click();
+            if (btn && btn.on_down) btn.on_down();
         });
+
+        this.target.addEventListener("mouseup", function (e) {
+            var v = new D2O.Vector2(e.pageX - PF.canvas.target.offsetLeft, e.pageY - PF.canvas.target.offsetTop);
+            var btn = PF.scene.checkButtons(v.mulScalar(1 / PF.canvas.to_target_ratio));
+            if (btn && btn.on_up) btn.on_up();
+        });
+
     },
 
     inTargetSpace: function (val) {

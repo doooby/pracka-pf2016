@@ -75,7 +75,7 @@ PF.scenes = {
             PF.scene.add(s);
         });
 
-        this.create_switcher("resume", 3000);
+        this.create_switcher("resume", 5000);
 
         PF.scene.singleFrame();
     },
@@ -95,33 +95,33 @@ PF.scenes = {
             {char: "oplatka",    x: 33.5, y: 21.5, name: "Pan Oplatka", text_x: -2.5},
             {char: "kluk",       x: 10.5, y: 55.5, name: "Pan Kluk", text_x: 0},
             {char: "chobotnice", x: 33.5, y: 55.5, name: "Pan Chobotnice", text_x: -5}
-        ].forEach(function (char) {
-            var s = new D2O.Sprite(PF.images[char.char]);
-            s.position.x = char.x + width/2;
-            s.position.y = char.y + height/2;
-            PF.scene.add(s);
+        ].forEach(function (definition) {
+            var s = new D2O.Sprite(PF.images[definition.char]);
+            s.position.x = definition.x + width/2;
+            s.position.y = definition.y + height/2;
 
-            var btn = new PF.utils.Button(char.x, char.y, width, height);
-            if (char.char==="chobotnice") {
+            var btn = new PF.utils.Button(definition.x, definition.y, width, height);
+            if (definition.char==="chobotnice") {
                 btn.position.x -= 1;
                 btn.size.x += 1;
             }
             btn.on_hover = function () {
-                this.do_render = true;
+                s.texture = PF.images[definition.char + "_tmavy"];
                 PF.scene.singleFrame();
             };
             btn.on_leave = function () {
-                this.do_render = false;
+                s.texture = PF.images[definition.char];
                 PF.scene.singleFrame();
             };
-            btn.on_click = function () {
-                PF.player.character = char.char;
+            btn.on_down = function () {
+                PF.player.character = definition.char;
                 PF.scenes.gameplay();
             };
-            PF.scene.add(btn);
-            PF.scene.addButton(btn);
 
-            PF.scene.addText(char.name, new D2O.Vector2(char.x + char.text_x, char.y + height + 3), 1.8);
+            PF.scene.add(s);
+            PF.scene.addButton(btn);
+            PF.scene.addText(definition.name,
+                new D2O.Vector2(definition.x + definition.text_x, definition.y + height + 3), 1.8);
         });
 
         PF.scene.singleFrame();
@@ -144,7 +144,9 @@ PF.scenes = {
 
         var downer, step, upper;
         PF.player.createSprite();
+        PF.player.clearStats();
         PF.player.attachKeyboard();
+        PF.player.addArrowsToScene();
 
         downer = new D2O.Looper(0.67, function () {
             if (downer.ticks === 9) PF.scene.add(PF.gizmos.creator);
@@ -202,6 +204,8 @@ PF.scenes = {
         PF.scene.clear();
         PF.scene.bg = "bg1";
 
+        PF.scene.addText("vyhodnocení ...", new D2O.Vector2(3, 45), 3);
+        PF.scene.addText("(ještě není)", new D2O.Vector2(3, 65), 3);
 
         PF.scene.singleFrame();
     },
@@ -224,7 +228,7 @@ PF.scenes = {
         }});
 
         btn = new PF.utils.Button(0, 0, PF.canvas.buffer.width, PF.canvas.buffer.height);
-        btn.on_click = function () {
+        btn.on_down = function () {
             next_scene();
         };
         PF.scene.addButton(btn);

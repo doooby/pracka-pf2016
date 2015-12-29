@@ -13,6 +13,7 @@ PF.gizmos = {
                     self.objects[i] = null;
                 }
                 if (g.hit_circle.collide(PF.player.sprite.hit_circle)) {
+                    PF.player.collect(g.texture.name);
                     self.objects[i] = null;
                 }
             }

@@ -38,6 +38,21 @@ PF.player = {
         this.sprite = sprite;
     },
 
+    clearStats: function () {
+      this.stats = {
+          mazlicek: 0,
+          penize: 0,
+          stesti: 0,
+          srdce: 0,
+          uspech: 0,
+          zdravi: 0
+      }
+    },
+
+    collect: function (name) {
+        this.stats[name] += 1;
+    },
+
     attachKeyboard: function () {
         PF.canvas.attachKeayboardEvents({
             keydown: function (e) {
@@ -50,6 +65,52 @@ PF.player = {
                 if (e.keyCode===37) PF.player.go_left = false;
                 if (e.keyCode===39) PF.player.go_right = false;
             }
+        });
+    },
+
+    addArrowsToScene: function () {
+        [
+            {texture: "vlevo",  pos: new D2O.Vector2(10, 84)},
+            {texture: "vpravo", pos: new D2O.Vector2(PF.canvas.buffer.width - 10, 84)}
+        ].forEach(function (definition) {
+            var s = new D2O.Sprite(PF.images[definition.texture]);
+            s.position = definition.pos;
+
+            var btn = new PF.utils.Button(s.position.x - s.width/2, s.position.y - s.height/2, s.width, s.height);
+            btn.on_hover = function () {
+                s.texture = PF.images[definition.texture + "_on"];
+                PF.scene.singleFrame();
+            };
+            btn.on_leave = function () {
+                s.texture = PF.images[definition.texture];
+                PF.scene.singleFrame();
+            };
+            btn.on_down = function () {
+                if (!PF.player.gameplay) return;
+                switch (definition.texture) {
+                    case "vlevo":
+                        PF.player.go_left = true;
+                        break;
+                    case "vpravo":
+                        PF.player.go_right = true;
+                        break;
+                }
+            };
+            btn.on_up = function () {
+                if (!PF.player.gameplay) return;
+                switch (definition.texture) {
+                    case "vlevo":
+                        PF.player.go_left = false;
+                        break;
+                    case "vpravo":
+                        PF.player.go_right = false;
+                        break;
+                }
+            };
+
+            PF.scene.add(s);
+            PF.scene.add(btn);
+            PF.scene.addButton(btn);
         });
     },
 
