@@ -14,6 +14,7 @@ configure do
   end
 
   register Sinatra::AssetPipeline
+  settings.assets_precompile << '*.mp3'
 
   if settings.development?
     d2o_file = "#{Sinatra::Application.settings.root}/assets/js/d2o.js"
