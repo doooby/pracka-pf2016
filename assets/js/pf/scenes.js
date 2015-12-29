@@ -113,7 +113,7 @@ PF.scenes = {
                 s.texture = PF.images[definition.char];
                 PF.scene.singleFrame();
             };
-            btn.on_down = function () {
+            btn.on_up = function () {
                 PF.player.character = definition.char;
                 PF.scenes.gameplay();
             };
@@ -228,7 +228,7 @@ PF.scenes = {
         }});
 
         btn = new PF.utils.Button(0, 0, PF.canvas.buffer.width, PF.canvas.buffer.height);
-        btn.on_down = function () {
+        btn.on_up = function () {
             next_scene();
         };
         PF.scene.addButton(btn);

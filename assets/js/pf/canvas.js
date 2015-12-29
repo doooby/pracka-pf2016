@@ -78,7 +78,13 @@ PF.canvas = {
             var v = new D2O.Vector2(e.pageX - PF.canvas.target.offsetLeft, e.pageY - PF.canvas.target.offsetTop);
             var btn = PF.scene.checkButtons(v.mulScalar(1 / PF.canvas.to_target_ratio));
             if (btn && btn.on_up) btn.on_up();
+            PF.player.go_nowhere();
         });
+
+        this.target.addEventListener("mouseout", function () {
+            PF.player.go_nowhere();
+        });
+
 
     },
 

@@ -39,14 +39,14 @@ PF.player = {
     },
 
     clearStats: function () {
-      this.stats = {
-          mazlicek: 0,
-          penize: 0,
-          stesti: 0,
-          srdce: 0,
-          uspech: 0,
-          zdravi: 0
-      }
+        this.stats = {
+            mazlicek: 0,
+            penize: 0,
+            stesti: 0,
+            srdce: 0,
+            uspech: 0,
+            zdravi: 0
+        }
     },
 
     collect: function (name) {
@@ -96,17 +96,6 @@ PF.player = {
                         break;
                 }
             };
-            btn.on_up = function () {
-                if (!PF.player.gameplay) return;
-                switch (definition.texture) {
-                    case "vlevo":
-                        PF.player.go_left = false;
-                        break;
-                    case "vpravo":
-                        PF.player.go_right = false;
-                        break;
-                }
-            };
 
             PF.scene.add(s);
             PF.scene.add(btn);
@@ -126,6 +115,12 @@ PF.player = {
     flyUp: function () {
         this.sprite.position.y = this.landYPosition();
         return this.landYPosition() + this.sprite.height/2 - 4;
+    },
+
+    go_nowhere: function () {
+        if (!PF.player.gameplay) return;
+        PF.player.go_left = false;
+        PF.player.go_right = false;
     }
 
 };
