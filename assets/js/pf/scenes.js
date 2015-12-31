@@ -180,8 +180,8 @@ PF.scenes = {
         });
         upper.ticks = 0;
 
-        PF.scene.add(PF.gizmos);
         PF.scene.add(PF.player.sprite);
+        PF.scene.add(PF.gizmos);
         PF.scene.add(downer);
         PF.scene.addText("Sbírej padající symboly.", new D2O.Vector2(3, 30), 3);
         PF.scene.addText("Pro pohyb použij šipky.", new D2O.Vector2(3, 45), 3);
