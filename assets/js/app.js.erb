@@ -1,6 +1,6 @@
-//= require ./bliss
 //= require ./FontLoader
 //= require ./Howler
+//= require ./jquery.mobile.custom
 //= require d2o
 //= depend_on_asset pf
 
@@ -107,9 +107,8 @@
 
         });
 
-        PF.player.addResumeText();
+        PF.player.addResumeStatus();
         PF.scene.singleFrame();
-        PF.player.addResumeText();
       };
 
       test_scene();

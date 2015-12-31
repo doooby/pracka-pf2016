@@ -14,6 +14,7 @@ PF.gizmos = {
                 }
                 if (g.hit_circle.collide(PF.player.sprite.hit_circle)) {
                     PF.player.collect(g.texture.name);
+                    PF.gizmos.counter.countInOneHit();
                     self.objects[i] = null;
                 }
             }
@@ -49,13 +50,27 @@ PF.gizmos = {
         return g;
     },
 
+    counter: {
+        count: 0,
+        text_field: null,
+        addToScene: function () {
+            var t = new PF.utils.CustomTextField("", new D2O.Vector2(0, 86), 5);
+            t.recalc();
+            t.fill_style = "white";
+            this.text_field = t;
+            PF.scene._texts.push(t);
+        },
+        countInOneHit: function () {
+            this.count += 1;
+            this.text_field.text = this.count.toString();
+            var width = PF.canvas.target_ctx.measureText(this.text_field.text).width;
+            this.text_field.rel_position.x = (PF.canvas.target.width/2 - width/2) / PF.canvas.to_target_ratio;
+            this.text_field.recalc();
+        }
+    },
+
     creator: new D2O.Looper(1, function () {
         PF.gizmos.objects[PF.gizmos._getNextEmptyIndex()] = PF.gizmos.getNextGizmo();
     })
-
-
-
-
-
 
 };

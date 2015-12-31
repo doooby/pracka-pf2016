@@ -26,7 +26,7 @@ PF.canvas = {
         //this.buffer_ctx.imageSmoothingEnabled = false;
         this.buffer_wh_ratio = wh_ratio;
 
-        this.container = $("#container");
+        this.container = document.getElementById("container");
     },
 
     rebuildTarget: function () {
@@ -95,17 +95,15 @@ PF.canvas = {
     _on_resize: function () {
         if (!PF.canvas.container) return;
 
-        var w, h, page = $(".page");
+        var w, h, page = document.getElementsByClassName(".page")[0];
         h = page.clientHeight - 10;
         w = Math.floor(h * PF.canvas.buffer_wh_ratio);
         if (w > page.clientWidth) {
             w = page.clientWidth;
             h = Math.floor(w / PF.canvas.buffer_wh_ratio);
         }
-        $.set(PF.canvas.container, {style: {
-            width: ""+w+"px",
-            height: ""+h+"px"
-        }});
+        PF.canvas.container.style.width = ""+w+"px";
+        PF.canvas.container.style.height = ""+h+"px";
 
         PF.canvas.to_target_ratio = w / PF.canvas.buffer.width;
 

@@ -151,11 +151,23 @@ PF.player = {
         return types[Math.floor(Math.random() * types.length)];
     },
 
-    addResumeText: function () {
-        var min = this.getMinStat(), max = this.getMaxStat();
+    addResumeStatus: function () {
+        var min, max = this.getMaxStat();
+        for (var i=0; i<50; i+=1) {
+            min = this.getMinStat();
+            if (min !== max) break;
+        }
         PF.resumes[max][max].concat(PF.resumes[max][min]).forEach(function (t, i) {
             PF.scene.addText(t, new D2O.Vector2(4, 40 + i*5), 2.8);
         });
+        max = new D2O.Sprite(PF.images[max]);
+        max.position.x = 10;
+        max.position.y = 30;
+        PF.scene.add(max);
+        min = new D2O.Sprite(PF.images[min]);
+        min.position.x = PF.canvas.buffer.width - 10;
+        min.position.y = 30;
+        PF.scene.add(min);
     }
 
 };

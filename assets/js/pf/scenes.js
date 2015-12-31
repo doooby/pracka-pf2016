@@ -67,14 +67,14 @@ PF.scenes = {
         PF.scene.bg = "bg1";
         var x_middle = PF.canvas.buffer.width / 2;
         ["tygr", "zela", "koci"].forEach(function (name, i) {
-            var item_y = 18 + i*(74 / 3);
+            var item_y = 27 + i*(65 / 3);
             PF.scene.addText((name==="zela" ? "žela" : name), new D2O.Vector2(x_middle - 4, item_y), 3);
             var s = new D2O.Sprite(PF.images[name]);
             s.position.x = x_middle;
             s.position.y = item_y + 8;
             PF.scene.add(s);
         });
-
+        PF.scene.addText("Autoři:", new D2O.Vector2(13, 15), 7);
         this.create_switcher("resume", 5000);
 
         PF.scene.singleFrame();
@@ -147,6 +147,7 @@ PF.scenes = {
         PF.player.clearStats();
         PF.player.attachKeyboard();
         PF.player.addArrowsToScene();
+        PF.gizmos.counter.count = 0;
 
         downer = new D2O.Looper(0.67, function () {
             if (downer.ticks === 6) step = PF.player.fallDown() / 8;
@@ -155,6 +156,7 @@ PF.scenes = {
                 PF.player.gameplay = true;
                 PF.scene._texts = [];
                 PF.scene.add(PF.gizmos.creator);
+                PF.gizmos.counter.addToScene();
             }
             if (downer.ticks >= 7) PF.player.sprite.position.y += step;
             downer.ticks += 1;
@@ -169,6 +171,8 @@ PF.scenes = {
             }
             if (upper.ticks >= 18) {
                 PF.player.gameplay = false;
+                PF.player.go_left = false;
+                PF.player.go_right = false;
                 PF.player.sprite.position.y -= step;
             }
             upper.ticks += 1;
@@ -204,8 +208,11 @@ PF.scenes = {
         PF.scene.clear();
         PF.scene.bg = "bg1";
 
-        PF.scene.addText("vyhodnocení ...", new D2O.Vector2(3, 45), 3);
-        PF.scene.addText("(ještě není)", new D2O.Vector2(3, 65), 3);
+        PF.scene.addText("V příštím roce:", new D2O.Vector2(3, 15), 4.6);
+        PF.scene.addText("PF", new D2O.Vector2(20, 70), 9);
+        PF.scene.addText("2016", new D2O.Vector2(14, 80), 9);
+
+        PF.player.addResumeStatus();
 
         PF.scene.singleFrame();
     },
