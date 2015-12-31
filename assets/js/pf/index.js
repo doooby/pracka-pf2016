@@ -1,2 +1,2 @@
-//= require ./helpers
+//= require ./utils
 //= require_tree .

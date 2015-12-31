@@ -121,6 +121,43 @@ PF.player = {
         if (!PF.player.gameplay) return;
         PF.player.go_left = false;
         PF.player.go_right = false;
+    },
+
+    getMaxStat: function () {
+        var types = [], max = -9999, val;
+        PF.gizmos.types.forEach(function (t) {
+            val = PF.player.stats[t];
+            if (val > max) {
+                max = val;
+                types = [t];
+            } else if (val === max) {
+                types.push(t);
+            }
+        });
+        return types[Math.floor(Math.random() * types.length)];
+    },
+
+    getMinStat: function () {
+        var types = [], min = 9999, val;
+        PF.gizmos.types.forEach(function (t) {
+            val = PF.player.stats[t];
+            if (val === min) {
+                types.push(t);
+            } else if (val < min) {
+                min = val;
+                types = [t];
+            }
+        });
+        return types[Math.floor(Math.random() * types.length)];
+    },
+
+    addResumeText: function () {
+        var min = this.getMinStat(), max = this.getMaxStat();
+        PF.resumes[max][max].concat(PF.resumes[max][min]).forEach(function (t, i) {
+            PF.scene.addText(t, new D2O.Vector2(4, 40 + i*5), 2.8);
+        });
     }
 
 };
+
+PF.player.clearStats();
