@@ -10,7 +10,7 @@ PF.canvas = {
     target_ctx: null,
     projectIntoTarget: null,
 
-    to_target_ratio: NaN,
+    to_target_ratio: 1,
 
     keyboard_events: {},
 
@@ -20,10 +20,6 @@ PF.canvas = {
         this.buffer.width = Math.floor(height * wh_ratio);
         this.buffer.height = height;
         this.buffer_ctx = this.buffer.getContext("2d");
-        //this.buffer_ctx.mozImageSmoothingEnabled = false;
-        //this.buffer_ctx.webkitImageSmoothingEnabled = false;
-        //this.buffer_ctx.msImageSmoothingEnabled = false;
-        //this.buffer_ctx.imageSmoothingEnabled = false;
         this.buffer_wh_ratio = wh_ratio;
 
         this.container = document.getElementById("container");
@@ -61,13 +57,6 @@ PF.canvas = {
             }
         });
 
-        //this.target.addEventListener("click", function (e) {
-        //    var v = new D2O.Vector2(e.pageX - PF.canvas.target.offsetLeft, e.pageY - PF.canvas.target.offsetTop);
-        //    var btn = PF.scene.checkButtons(v.mulScalar(1 / PF.canvas.to_target_ratio));
-        //    if (btn && btn.on_click) btn.on_click();
-        //});
-
-
         this.target.addEventListener("mousedown", function (e) {
             var v = new D2O.Vector2(e.pageX - PF.canvas.target.offsetLeft, e.pageY - PF.canvas.target.offsetTop);
             var btn = PF.scene.checkButtons(v.mulScalar(1 / PF.canvas.to_target_ratio));
@@ -85,7 +74,29 @@ PF.canvas = {
             PF.player.go_nowhere();
         });
 
+        this.target.addEventListener("touchstart", function (e) {
+            var touch = e.touches[0];
+            if (touch) {
+                var v = new D2O.Vector2(touch.pageX - PF.canvas.target.offsetLeft, touch.pageY - PF.canvas.target.offsetTop);
+                var btn = PF.scene.checkButtons(v.mulScalar(1 / PF.canvas.to_target_ratio));
+                if (btn && btn.on_down) btn.on_down();
+            }
+        });
 
+        this.target.addEventListener("touchend", function (e) {
+            var touch = e.changedTouches[0];
+            if (touch) {
+                var v = new D2O.Vector2(touch.pageX - PF.canvas.target.offsetLeft, touch.pageY - PF.canvas.target.offsetTop);
+                var btn = PF.scene.checkButtons(v.mulScalar(1 / PF.canvas.to_target_ratio));
+                if (btn && btn.on_up) btn.on_up();
+                PF.player.go_nowhere();
+                e.preventDefault();
+            }
+        });
+
+        this.target.addEventListener("touchcancel", function () {
+            PF.player.go_nowhere();
+        });
     },
 
     inTargetSpace: function (val) {
@@ -95,7 +106,7 @@ PF.canvas = {
     _on_resize: function () {
         if (!PF.canvas.container) return;
 
-        var w, h, page = document.getElementsByClassName(".page")[0];
+        var w, h, page = document.getElementsByClassName("page")[0];
         h = page.clientHeight - 10;
         w = Math.floor(h * PF.canvas.buffer_wh_ratio);
         if (w > page.clientWidth) {

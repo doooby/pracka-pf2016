@@ -77,11 +77,7 @@ PF.player = {
             s.position = definition.pos;
 
             var btn = new PF.utils.Button(s.position.x - s.width/2, s.position.y - s.height/2, s.width, s.height);
-            btn.on_hover = function () {
-                s.texture = PF.images[definition.texture + "_on"];
-                PF.scene.singleFrame();
-            };
-            btn.on_leave = function () {
+            btn.on_up = function () {
                 s.texture = PF.images[definition.texture];
                 PF.scene.singleFrame();
             };
@@ -95,6 +91,8 @@ PF.player = {
                         PF.player.go_right = true;
                         break;
                 }
+                s.texture = PF.images[definition.texture + "_on"];
+                PF.scene.singleFrame();
             };
 
             PF.scene.add(s);

@@ -54,8 +54,9 @@ PF.scenes = {
         PF.scene.clear();
         PF.scene.bg = "bg1";
 
-        PF.scene.addText("Copak ti v příštím roce", new D2O.Vector2(3, 40), 3);
-        PF.scene.addText(" spadne na hlavu?", new D2O.Vector2(7.5, 60), 3);
+        PF.scene.addText("Copak Ti asi", new D2O.Vector2(10, 25), 4);
+        PF.scene.addText("v příštím roce", new D2O.Vector2(6, 32), 4);
+        PF.scene.addText("spadne na hlavu?", new D2O.Vector2(1.5, 39), 4);
 
         this.create_switcher("char_choose");
 
@@ -239,6 +240,45 @@ PF.scenes = {
             next_scene();
         };
         PF.scene.addButton(btn);
+    },
+
+    test_resumes: function () {
+        PF.scene.clear();
+        PF.scene.bg = "bg1";
+
+        PF.gizmos.types.forEach(function (type, i) {
+            var texture = PF.images[type], row_top = 4, tw2 = texture.width/ 2, th2 = texture.height/2;
+            var s1, s2, b1, b2;
+
+            s1 = new D2O.Sprite(texture);
+            s1.position = new D2O.Vector2(tw2 + i*8, row_top + th2);
+            b1 = new PF.utils.Button(i*8, row_top, texture.width, texture.height);
+            b1.on_down = function () {
+                var max = PF.player.getMaxStat();
+                PF.player.stats[type] = PF.player.stats[max] + 1;
+                PF.scenes.test_resumes();
+            };
+
+            row_top += 10;
+            s2 = new D2O.Sprite(texture);
+            s2.position = new D2O.Vector2(tw2 + i*8, row_top + th2);
+            b2 = new PF.utils.Button(i*8, row_top, texture.width, texture.height);
+            b2.on_down = function () {
+                var min = PF.player.getMinStat();
+                PF.player.stats[type] = PF.player.stats[min] - 1;
+                PF.scenes.test_resumes();
+            };
+
+
+            PF.scene.add(s1);
+            PF.scene.addButton(b1);
+            PF.scene.add(s2);
+            PF.scene.addButton(b2);
+
+        });
+
+        PF.player.addResumeStatus();
+        PF.scene.singleFrame();
     }
 
 };
